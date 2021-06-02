@@ -1,4 +1,4 @@
-package ru.milandr.courses.sweeper;
+package ru.mipt.courses.sweeper;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -41,9 +41,9 @@ public class Sweeper extends Application {
     private long openedTiles = 0;
     private long flagsAvailable = 0;
 
-    private Image flag = new Image("/ru/milandr/courses/sweeper/ali.png");
-    private Image mine = new Image("/ru/milandr/courses/sweeper/mine.png");
-    private Image mineCrossed = new Image("/ru/milandr/courses/sweeper/notamine.png");
+    private Image mine = new Image("/ru/mipt/courses/sweeper/mine.jpg");
+    private Image flag = new Image("/ru/mipt/courses/sweeper/flag.jpg");
+    private Image mineCrossed = new Image("/ru/mipt/courses/sweeper/notamine.jpg");
 
     private Text flags = new Text();
     private Text info = new Text();
@@ -175,7 +175,6 @@ public class Sweeper extends Application {
             if (newX >= 0 && newX < xTiles
                     && newY >= 0 && newY < yTiles)
                 neighbors.add(grid[newX][newY]);
-
         }
         return neighbors;
     }
@@ -280,18 +279,27 @@ public class Sweeper extends Application {
 
             if (hasBomb) {
                 border.setFill(Color.RED);
-                info.setText("Ты лох");
+                String file = "src/ru/mipt/courses/sweeper/bomba.mp3";
+                Media sound = new Media(new File(file).toURI().toString());
+                MediaPlayer mediaPlayer = new MediaPlayer(sound);
+                mediaPlayer.setCycleCount(1);
+                mediaPlayer.play();
+                info.setText("Вы проиграли");
                 showBombs();
                 stopGame();
                 return;
             }
-
             openedTiles++;
             isOpened = true;
             text.setVisible(true);
             border.setFill(null);
 
             if (openedTiles == (xTiles * yTiles) - allBombs) {
+                String file = "src/ru/mipt/courses/sweeper/pobeda.mp3";
+                Media sound = new Media(new File(file).toURI().toString());
+                MediaPlayer mediaPlayer = new MediaPlayer(sound);
+                mediaPlayer.setCycleCount(1);
+                mediaPlayer.play();
                 info.setText("Красава");
                 showBombs();
                 stopGame();
@@ -309,13 +317,6 @@ public class Sweeper extends Application {
 
     @Override
     public void start(Stage stage) {
-        String file = "src/ru/milandr/courses/sweeper/blin.mp3";
-        Media sound = new Media(new File(file).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        mediaPlayer.play();
-
-
         scene = new Scene(createContent());
         stage.setScene(scene);
         stage.show();
